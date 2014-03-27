@@ -5,6 +5,8 @@
 # of "djangoappengine" from this file.
 from djangoappengine.settings_base import *
 
+import os
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -78,7 +80,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'h-g#jjqx15=c&zh(ec$6d$18eg4*l=ti1t$4ejxx)^3mno^iyg'
+SECRET_KEY = 'h-g#jjknxzkch687213^%54df$x)^3mno^iyg'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -102,10 +104,12 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'rexkirshnercom.urls'
 
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -122,6 +126,7 @@ INSTALLED_APPS = (
     'djangotoolbox',
     'autoload',
     'dbindexer',
+    'map',
 
     # djangoappengine should come last, so it can override a few manage.py commands
     'djangoappengine',

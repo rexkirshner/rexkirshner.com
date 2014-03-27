@@ -1,0 +1,9 @@
+.map-panel {
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#map-canvas { 
+    height: 500px;
+}
