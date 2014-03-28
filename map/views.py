@@ -1,8 +1,10 @@
-import json, urllib2
+import urllib2, datetime
 from math import radians, cos, sin, asin, sqrt
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import simplejson
+from django.http import HttpResponse
 
 def haversine(lon1, lat1, lon2, lat2):
     """
@@ -11,7 +13,6 @@ def haversine(lon1, lat1, lon2, lat2):
     """
     # convert decimal degrees to radians 
     
-    lon1, lat1, lon2, lat2 = map(lambda x: x / 10000000 , [lon1, lat1, lon2, lat2])
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
     # haversine formula 
@@ -27,14 +28,16 @@ def haversine(lon1, lat1, lon2, lat2):
 class Parser(object):
     
     def __init__(self, data):
-        data = json.loads(data)
+        data = simplejson.loads(data)
         self.locations = data['locations']
+        self._simplify()
     
-    def simplify(self):
-        simple_locations = []
-        for loc in self.locations:
-            simple_locations.append({'timestampMs':loc['timestampMs'], 'longitudeE7':loc['longitudeE7'], 'latitudeE7':loc['latitudeE7']})
-        self.locations = simple_locations
+    def _simplify(self):
+        for i in range(len(self.locations)):
+            time = self.locations[i]['timestampMs']
+            long = self.locations[i]['longitudeE7'] / 10000000.0
+            lat = self.locations[i]['latitudeE7'] / 10000000.0
+            self.locations[i] = {'timestamp':time, 'long':long, 'lat':lat}
         
     def closest_points(self, km = 25):
         new_locations = [self.locations[0]]
@@ -44,21 +47,104 @@ class Parser(object):
                 new_locations.append(loc)
         self.locations = new_locations
     
-    def js(self):
-        ret = 'location_history = ['
-        for loc in self.locations:
-            ret += '{"timestamp":%s, lat: %s, long %s},' % (loc['timestampMs'], loc['latitudeE7'] / 10000000.0, loc['longitudeE7'] / 10000000.0)
-        ret += ']'
-        return ret
+    
+    
+
+def index(request):
+    
+    return render_to_response("map/map.html",
+                              {},
+                              context_instance=RequestContext(request))
 
 def location_history(request):
-    
     url = 'https://dl.dropboxusercontent.com/u/28618487/mapper/LocationHistory.json'
+
     data = urllib2.urlopen(url).read()
     p = Parser(data)
-    p.closest_points()
-    #js = p.js()
     
-    return render_to_response("map/location_history.html",
-                              {'location_history':p.locations,},
-                              context_instance=RequestContext(request))
+    kml_start = '''
+        <?xml version="1.0" encoding="UTF-8"?>
+        <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+        <Document>
+        <name>Location history from 02/15/1976 to 03/26/2014</name>
+        <open>1</open>
+        <description/>
+        <StyleMap id="multiTrack">
+        <Pair>
+        <key>normal</key>
+        <styleUrl>#multiTrack_n</styleUrl>
+        </Pair>
+        <Pair>
+        <key>highlight</key>
+        <styleUrl>#multiTrack_h</styleUrl>
+        </Pair>
+        </StyleMap>
+        <Style id="multiTrack_n">
+        <IconStyle>
+        <Icon>
+        <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+        </IconStyle>
+        <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+        </LineStyle>
+        </Style>
+        <Style id="multiTrack_h">
+        <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+        <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+        </IconStyle>
+        <LineStyle>
+        <color>99ffac59</color>
+        <width>8</width>
+        </LineStyle>
+        </Style>
+        <Placemark>
+        <name>Latitude User</name>
+        <description>Location history for Latitude User from 02/15/1976 to 03/26/2014</description>
+        <styleUrl>#multiTrack</styleUrl>
+        <gx:Track>
+        <altitudeMode>clampToGround</altitudeMode>
+    '''
+    
+    kml_end = '''
+    </gx:Track>
+    </Placemark>
+    </Document>
+    </kml>
+    '''
+    
+    kml_body = ''
+    for loc in p.locations:
+        kml_body += '<gx:coord>%s %s 0</gx:coord>' % (loc['long'], loc['lat'])
+    
+    
+    response = HttpResponse(kml_start + kml_body + kml_end, content_type='application/vnd.google-earth.kml+xml')
+    response['Content-Disposition'] = 'attachment; filename="location_history.kml"'
+    
+    return response
+    
+    #p.closest_points()
+    
+    #return render_to_response("map/location_history.kml",
+    #                          {'location_history':p.locations,},
+    #                          context_instance=RequestContext(request))
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

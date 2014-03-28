@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block css %}
-    <link href="/static/map.css" rel="stylesheet">
+    <link href="/static/map/map.css" rel="stylesheet">
 {% endblock %}
 
 
@@ -11,13 +11,19 @@
         function initialize() {
             var mapOptions = {
                 center: new google.maps.LatLng(39.8282, -98.5795),
-                zoom: 5,
+                zoom: 4,
                 scrollwheel: false,
             };
             var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            var ctaLayer = new google.maps.KmlLayer({
+                url: 'http://rexkirshnercom.appspot.com/api/location_history.kml',
+                preserveViewport: true,
+            });
+            ctaLayer.setMap(map);
         }
         google.maps.event.addDomListener(window, 'load', initialize);
-        {{ location_history}}
+        
+        
         
     </script>
 {% endblock %}
