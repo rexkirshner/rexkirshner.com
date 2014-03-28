@@ -51,7 +51,6 @@ class Parser(object):
     
 
 def index(request):
-    
     return render_to_response("map/map.html",
                               {},
                               context_instance=RequestContext(request))
