@@ -25,7 +25,15 @@ handlers:
 - url: /static/admin
   static_dir: django/contrib/admin/static/admin
   expiration: '0'
-  
+
+- url: /static/js
+  static_dir: rexkirshnercom/static/js
+  expiration: '0'
+
+- url: /static/css
+  static_dir: rexkirshnercom/static/css
+  expiration: '0'
+
 - url: /static/map
   static_dir: map/static/map
   expiration: '0'

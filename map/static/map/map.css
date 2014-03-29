@@ -7,3 +7,18 @@
 #map-canvas { 
     height: 500px;
 }
+
+#loading-text {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+}
+
+#map-form {
+    text-align:center;
+}
+
+.center {
+    display:inline-block;
+}

@@ -6,52 +6,103 @@
 
 
 {% block javascript %}
+    
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBN4BYI6eqF2WlQE2HVbHkSP_Ldu6USWZw&sensor=true'></script>
     <script type="text/javascript">
+        var map;
+        var path;
+        var total_locations = [];
         function initialize() {
             var mapOptions = {
                 center: new google.maps.LatLng(39.8282, -98.5795),
                 zoom: 4,
                 scrollwheel: false,
             };
-            var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-            var ctaLayer = new google.maps.KmlLayer({
-                url: 'http://rexkirshnercom.appspot.com/api/location_history.kml',
-                preserveViewport: true,
-            });
-            ctaLayer.setMap(map);
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
         }
+        
+        
         google.maps.event.addDomListener(window, 'load', initialize);
-        $(function() {
-            $( "#start_date" ).datepicker();
-            $( "#end_date" ).datepicker();
-            today = new Date();
-            $( "#end_date" ).val( today.getMonth() + '/' + today.getDay() + '/' + today.getFullYear());
-        });
+        
+        function pullMap() {
+            
+            total_locations = [];
+            $.getJSON('api/location_history/', function(data){
+                $.each(data, function(i, obj) {
+                    obj['timestamp'] = Number(obj['timestamp']);
+                    total_locations.push(obj);
+                });
+                var end = new Date(total_locations[0]['timestamp']);
+                $( "#end_date" ).val( (end.getMonth() + 1) + '/' + end.getDate() + '/' + end.getFullYear());
+                var start = new Date(total_locations[total_locations.length-1]['timestamp']);
+                $( "#start_date" ).val( (start.getMonth() + 1) + '/' + start.getDate() + '/' + start.getFullYear()); 
+                updateMap();
+            });
+            
+            
+            
+        }
+        
+        function updateMap(){
+            path.setMap(null);
+            
+            var start = Number(new Date($('#start_date').val()).getTime());
+            var end = Number(new Date($('#end_date').val()).getTime());
+            var layovers = $('#layovers').is(':checked');
+            
+            
+            var f;
+            for (f = 0; f < total_locations.length; f++) 
+                if (end >= total_locations[f]['timestamp']) break;
+
+            var s;
+            for (s = total_locations.length - 1; s >= 0; s--) 
+                if (start <= total_locations[s]['timestamp']) break; 
+            
+            var locations = []
+            for (var i = f; i <= s; i++) {
+                if (!layovers)
+                    if (total_locations[i]['layover']) 
+                        continue;
+                    
+                locations.push(new google.maps.LatLng(total_locations[i]['lat'], total_locations[i]['long']));
+            }
+                        
+            path = new google.maps.Polyline({
+                    path: locations,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+            path.setMap(map);
+            $( "#loading-area" ).isLoading( "hide" );
+        }
+        
         
         $(function() {
-            $("#submit_update").click(function() {
-                var start = new Date($('#start_date').val()).getTime();
-                var end = new Date($('#end_date').val()).getTime();
-                var layovers = $('#layovers').is(':checked');
-                
-                $.ajax({
-                  type: "GET",
-                  url: "api/settings",
-                  data: 'start=' + start + '&end=' + end + '&layovers=' + ,
-                  success: function() {
-                    $('#contact_form').html("<div id='message'></div>");
-                    $('#message').html("<h2>Contact Form Submitted!</h2>")
-                    .append("<p>We will be in touch soon.</p>")
-                    .hide()
-                    .fadeIn(1500, function() {
-                      $('#message').append("<img id='checkmark' src='images/check.png' />");
-                    });
-                  }
-                });
-                
-            });
+            path = new google.maps.Polyline();
+            $( "#start_date" ).datepicker();
+            $( "#end_date" ).datepicker();
+            $( "#start_date" ).change(function () {updateMap()});
+            $( "#end_date" ).change(function () {updateMap()});
+            $( "#layovers" ).change(function () {updateMap()});
+
+            pullMap();
+        
+            $( "#loading-area" ).isLoading({
+                position: "overlay"
+            });    
+
         });
+        
+        
+            
+            
+        
+        
+        
         
         
         
@@ -63,28 +114,34 @@
 
 
 {% block content %}
-    <div class="panel panel-default map-panel">
-        <div class="panel-header">
-            <form class="form-inline" role="form">
-              <div class="form-group">
-              <label>
-                <input type="text" class="form-control" id="start_date" value='04/29/2013'>
-              </label>
-              </div>
-              <div class="form-group">
-                <label>
-                <input type="text" class="form-control" id="end_date">
-                </label>
-              </div>
-                <label>
-                  <input type="checkbox" id='layovers'> Show Layovers
-                </label>
-              <button class="btn btn-default" id='submit_update'>Update</button>
-            </form>
-        </div>
+    <div id="map" class="panel panel-default map-panel">
+        <div id='loading-area'>
+            <div class="panel-header">
+                <div id='map-controls'>
+                    <form  id='map-form' class="form-inline" role="form">
+                    <div class='center'>
+                      <div class="form-group">
+                      <label>
+                        <input type="text" class="form-control" id="start_date" >
+                      </label>
+                      </div>
+                      <div class="form-group">
+                        <label>
+                        <input type="text" class="form-control" id="end_date">
+                        </label>
+                      </div>
+                        <label>
+                          <input type="checkbox" id='layovers' checked> Show Layovers
+                        </label>
+                    </div>
+                    </form>
+                </div>
+            </div>
         
-        <div class="panel-body" id="map-canvas">
-            Panel content
+        
+            <div class="panel-body" id="map-canvas">
+                Panel content
+            </div>
         </div>
       
     </div>
