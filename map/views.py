@@ -6,7 +6,9 @@ from django.template import RequestContext
 from django.utils import simplejson
 from django.http import HttpResponse
 
+import settings
 from models import LocationHistoryPoint
+
 
 def haversine(lon1, lat1, lon2, lat2):
     """
@@ -36,30 +38,44 @@ class Parser(object):
     
     def _simplify(self):
         for i in range(len(self.locations)):
-            time = self.locations[i]['timestampMs']
+            time = int(self.locations[i]['timestampMs'])
             long = self.locations[i]['longitudeE7'] / 10000000.0
             lat = self.locations[i]['latitudeE7'] / 10000000.0
             self.locations[i] = {'timestamp':time, 'long':long, 'lat':lat}
 
-    def find_new_entries(self, latest_saved = None):
+    def find_new_entries(self, latest_saved = None, earliest_saved = None):
         if latest_saved:
             for i in range(len(self.locations)):
-                new_data_point = 0
-                if int(self.locations[i]['timestamp']) <= int(latest_saved.timestamp):
-                    new_data_point = i
+                new_data_point_1 = 0
+                if self.locations[i]['timestamp'] <= latest_saved.timestamp:
+                    new_data_point_1 = i
                     break
                 
         else:
             new_data_point = len(self.locations)
         
-        return self.locations[:new_data_point]
+        if earliest_saved:
+            x = range(len(self.locations))
+            x.reverse()
+            for i in x:
+                new_data_point_2 = len(self.locations)
+                if self.locations[i]['timestamp'] >= earliest_saved.timestamp:
+                    new_data_point_2 = i
+                    break  
+        else:
+            new_data_point_2 = 0
+        
+        return self.locations[:new_data_point_1] + self.locations[new_data_point_2:]
               
 class Analyzer(object):
     
     def __init__(self, data):
-        self.locations = []
-        for loc in data:
-            self.locations.append({'timestamp':loc.timestamp, 'long':loc.longitude, 'lat':loc.latitude})
+        if type(data) is list:
+            self.locations = data
+        else:
+            self.locations = []
+            for loc in data:
+                self.locations.append(loc.to_dict())
         
     def closest_points(self, km = 25):
         new_locations = [self.locations[0]]
@@ -88,12 +104,12 @@ class Analyzer(object):
             bb = int(b.strftime("%s")) * 1000
             
             
-            if int(self.locations[i]['timestamp']) < bb and int(self.locations[i]['timestamp']) > aa:
+            if self.locations[i]['timestamp'] < bb and self.locations[i]['timestamp'] > aa:
                 
                 self.locations[i]['layover'] = True
         
         for i in range(1, len(i_of_flight_arrival)):
-            time_delta = int(self.locations[i_of_flight_arrival[i-1]]['timestamp']) - int(self.locations[i_of_flight_arrival[i]]['timestamp'])
+            time_delta = self.locations[i_of_flight_arrival[i-1]]['timestamp'] - self.locations[i_of_flight_arrival[i]]['timestamp']
             if time_delta < min_time:
                 for j in range( i_of_flight_arrival[i-1], i_of_flight_arrival[i]+1):
                     self.locations[j]['layover'] = True
@@ -110,10 +126,19 @@ def index(request):
                               context_instance=RequestContext(request))
 
 def location_history(request):
-    data = LocationHistoryPoint.objects.all().order_by('-timestamp')
+    if settings.USE_DB:
+        data = LocationHistoryPoint.objects.all().order_by('-timestamp')
+    else:
+        url = 'https://dl.dropboxusercontent.com/u/28618487/mapper/LocationHistory.json'
+
+        data = urllib2.urlopen(url).read()
+        p = Parser(data)
+        data = p.locations
+    
     a = Analyzer(data)
     a.identify_layovers()
     response = HttpResponse(a.json())
+    
     return response
 
 def update_database(request):
@@ -122,14 +147,27 @@ def update_database(request):
     data = urllib2.urlopen(url).read()
     p = Parser(data)
     try:
-        latest_point = LocationHistoryPoint.objects.latest('timestamp')
-    except LocationHistoryPoint.DoesNotExist:
+        latest_point = LocationHistoryPoint.objects.all().order_by('-timestamp')[0]
+        try:
+            earliest_point = LocationHistoryPoint.objects.all().order_by('-timestamp')[LocationHistoryPoint.objects.all().count() - 1]
+        except IndexError:
+            earliest_point = None
+
+    except IndexError:
         latest_point = None
-    new_entries = p.find_new_entries(latest_point)
+
+    new_entries = p.find_new_entries(latest_point, earliest_point)
     for entry in new_entries:
         add = LocationHistoryPoint(latitude = entry['lat'], longitude = entry['long'], timestamp = entry['timestamp'])
         add.save()
-    return HttpResponse('num of new entires: %d <br />total number of entries: %d <br />total number of entries in doc: %d <br />' % (len(new_entries), LocationHistoryPoint.objects.count(), len(p.locations)))
+    
+    recap = 'num of new entires: %d <br />total number of entries: %d <br />total number of entries in doc: %d <br />' % (len(new_entries), LocationHistoryPoint.objects.count(), len(p.locations))
+    if earliest_point:
+        recap += 'earliest_point: %s (%s)<br />' % (datetime.datetime.fromtimestamp(earliest_point.timestamp/1000).isoformat(), earliest_point.timestamp)
+    if latest_point:
+        recap += 'latest_point: %s (%s)<br />' % (datetime.datetime.fromtimestamp(latest_point.timestamp/1000).isoformat(), latest_point.timestamp)
+    
+    return HttpResponse(recap)
     
     
     

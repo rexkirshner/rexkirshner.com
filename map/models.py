@@ -7,11 +7,11 @@ from django.db import models
 class LocationHistoryPoint(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
-    timestamp = models.CharField(max_length=14)
+    timestamp = models.BigIntegerField()
     
     def to_dict(self):
         return {'timestamp':self.timestamp, 'long':longitude, 'lat':self.latitude}
 
     def __unicode__(self):
-        return datetime.datetime.fromtimestamp(int(self.timestamp)/1000).isoformat()
+        return datetime.datetime.fromtimestamp(self.timestamp/1000).isoformat()
       

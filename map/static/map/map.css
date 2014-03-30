@@ -22,3 +22,12 @@
 .center {
     display:inline-block;
 }
+
+.horz-center {
+    position:relative;
+    top:5px;
+}
+
+.input-thin {
+    width:100px;
+}
