@@ -31,3 +31,13 @@ indexes:
   properties:
   - name: __key__
     direction: desc
+
+- kind: photos_photo
+  properties:
+  - name: __key__
+    direction: desc
+
+- kind: photos_testgae
+  properties:
+  - name: __key__
+    direction: desc

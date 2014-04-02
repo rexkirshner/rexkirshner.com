@@ -15,8 +15,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     
+    url(r'^media/', include('blobstore_storage.urls')),
     
     url(r'^map/', include('map.urls')),
     url(r'^photos/', include('photos.urls')),
+    
 
 )

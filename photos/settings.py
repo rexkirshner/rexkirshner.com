@@ -1,0 +1,1 @@
+UPLOAD_TO = 'photos/uploads'

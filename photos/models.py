@@ -1,11 +1,33 @@
+import datetime 
+
 from django.db import models
+from django.forms import ModelForm
 
-from google.appengine.ext import blobstore
+from blobstore_storage.storage import BlobStoreStorage
 
+from settings import UPLOAD_TO
 
 # Create your models here.
 
 
-class Photo(models):
-    datetime =  models.DateTimeField()
+class Photo(models.Model):
+    upload_time = models.DateTimeField(default = datetime.datetime.now())
+    photo = models.ImageField(storage=BlobStoreStorage(), upload_to=UPLOAD_TO, max_length=255)
+    def __unicode__(self):
+        index = self.photo.name.find('/' + UPLOAD_TO)
+        if index > -1:
+            return self.photo.name[len(UPLOAD_TO) + index + 2:]
+
+        return self.photo.name
+    
+        
+class PhotoForm(ModelForm):
+    class Meta:
+        model = Photo
+        exclude = ['upload_time']
+    
+        
+        
+    
+
     

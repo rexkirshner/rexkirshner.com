@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'djangotoolbox',
     'autoload',
     'dbindexer',
+    'blobstore_storage',
     'rexkirshnercom',
     'map',
     'photos',
@@ -134,6 +135,9 @@ INSTALLED_APPS = (
     # djangoappengine should come last, so it can override a few manage.py commands
     'djangoappengine',
 )
+
+
+
 
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
@@ -173,3 +177,4 @@ LOGGING = {
         },
     }
 }
+
