@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     
     
-    url(r'^', include('map.urls')),
+    url(r'^map/', include('map.urls')),
+    url(r'^photos/', include('photos.urls')),
 
 )
