@@ -6,6 +6,8 @@ from django.template import RequestContext
 from django.utils import simplejson
 from django.http import HttpResponse
 
+
+
 import settings
 from models import LocationHistoryPoint
 
@@ -76,8 +78,10 @@ class Analyzer(object):
             self.locations = []
             for loc in data:
                 self.locations.append(loc.to_dict())
+        if settings.COMPRESS:
+            self._closest_points(settings.COMPRESS_MIN_KM)
         
-    def closest_points(self, km = 25):
+    def _closest_points(self, km = 25):
         new_locations = [self.locations[0]]
         for loc in self.locations[1:]:
             distance = haversine(new_locations[-1]['long'],new_locations[-1]['lat'],loc['long'],loc['lat']) 

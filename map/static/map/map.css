@@ -1,5 +1,5 @@
 .map-panel {
-    width: 85%;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -15,8 +15,13 @@
     z-index: 2;
 }
 
+#map {
+padding-top:5px;
+}
+
 #map-form {
     text-align:center;
+    
 }
 
 .center {
@@ -25,7 +30,6 @@
 
 .horz-center {
     position:relative;
-    top:5px;
 }
 
 .input-thin {

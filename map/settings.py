@@ -1,1 +1,5 @@
 USE_DB = False
+
+COMPRESS = True
+
+COMPRESS_MIN_KM = 1.6
