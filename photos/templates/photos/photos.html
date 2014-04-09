@@ -6,20 +6,26 @@
 
 
 {% block javascript %}
-
+    <script>
+        var flickr_api_key = "{{flickr.api_key}}";
+        var flickr_user_id = "{{flickr.user_id}}";
+        
+    </script>
+    <script src='/static/photos/photos.js'></script>
 {% endblock %}
 
 
 {% block content %}
+<table id='photos' class='table'>
+    <thead>
+        <tr>
+            <td>Preview</td>
+            <td>Link</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
 
-
-
-<form role="form" action="/photos/" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
-
+</table>
 
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+
+{% block javascript %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<form role="form" action="/photos/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+
+{% endblock %}

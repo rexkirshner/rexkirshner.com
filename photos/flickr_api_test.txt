@@ -1,0 +1,15 @@
+NOT RIGHT
+getting user_id
+http://api.flickr.com/services/rest/?method=flickr.people.findByUsername&api_key=fe7e843f655ed8547e4c110b5a5e598c&username=me
+user_id:35468145071@N01
+
+my user_id: 99320804@N02
+
+list my sets
+http://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=fe7e843f655ed8547e4c110b5a5e598c&user_id=99320804@N02
+relevant:
+    <photoset id="72157643363289374" primary="11458151356" secret="fbb448555d" server="3711" farm="4" photos="1" videos="0" needs_interstitial="0" visibility_can_see_set="1" count_views="0" count_comments="0" can_comment="0" date_create="1396542379" date_update="1396549205">
+    <title>Backgrounds</title>
+    <description/>
+    </photoset>
+    

@@ -7,9 +7,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from models import Photo, PhotoForm
+import settings
 
     
-def index(request):
+def upload_photo(request):
     if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -18,9 +19,14 @@ def index(request):
     else:
          form = PhotoForm()
     f = PhotoForm
-    return render_to_response("photos/photos.html",
+    return render_to_response("photos/upload_photo.html",
                               {'form':form},
-                              context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))    
 
-def upload_photo(request):
-    pass
+
+def index(request):
+            
+    return render_to_response("photos/photos.html",
+                              {'flickr':settings.FLICKR_INFO},
+                              context_instance=RequestContext(request))    
+ 
