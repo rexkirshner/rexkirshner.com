@@ -11,7 +11,7 @@ $.getJSON( url, function( data ) {
         //photo_urls.push(photo_url);
         //$('#photos > tbody:last').append('<tr><td><image src="' + tiny_photo_url + '"></image></td><td><a href="' + large_photo_url + '">Link</a></td></tr>');
         var google_map_url = 'http://maps.googleapis.com/maps/api/staticmap?&zoom=6&size=600x300&markers=color:blue|' + val['latitude'] + ',' + val['longitude'] + '&sensor=true'
-        $('#main-photo > ul:last').append('<li><p class="flex-caption"><a title="Taken on ' + val['datetaken'] + '"class="map-link" href="' + google_map_url + '">Check where this was taken</a></p><image src="' + large_photo_url + '"></image></li>');
+        $('#main-photo > ul:last').append('<li><p class="flex-caption"><a title="Taken on ' + val['datetaken'] + '"class="map-link" href="' + google_map_url + '">Check where this was taken</a></p><image class="lazy" data-src="' + large_photo_url + '"></image></li>');
         $('#carousel > ul:last').append('<li><image class="lazy" data-src="' + medium_photo_url + '"></image></li>');
 
     });
