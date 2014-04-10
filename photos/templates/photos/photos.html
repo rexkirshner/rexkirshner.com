@@ -1,31 +1,67 @@
 {% extends 'base.html' %}
 
 {% block css %}
+    <link href="/static/photos/flexslider.css" rel="stylesheet">
+    <link href="/static/photos/photos.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/photos/magnific-popup.css"> 
 
 {% endblock %}
 
 
 {% block javascript %}
+
     <script>
         var flickr_api_key = "{{flickr.api_key}}";
         var flickr_user_id = "{{flickr.user_id}}";
-        
     </script>
+    <script src='/static/photos/modernizr.js'></script>
+
     <script src='/static/photos/photos.js'></script>
+    <script src='/static/photos/jquery.flexslider.js'></script>
+    <script src='/static/photos/jquery.easing.js'></script>
+    <script src='/static/photos/jquery.mousewheel.js'></script>
+
+    <script src="/static/photos/jquery.magnific-popup.js"></script> 
 {% endblock %}
 
 
 {% block content %}
-<table id='photos' class='table'>
-    <thead>
-        <tr>
-            <td>Preview</td>
-            <td>Link</td>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
 
-</table>
 
+<div class='row'>
+    <div class='col-md-2'>
+    </div>
+    <div class='col-md-8'>
+        <div id='main-photo' class='flexslider'>
+            <ul class='slides'>
+            </ul>
+        </div>
+
+        <div id='carousel' class='flexslider'>
+            <ul class='slides'>
+            </ul>
+        </div>
+    </div>
+    <div class='col-md-2'>
+    </div>
+
+    <div class='col-md-0'>
+    </div>
+</div>
+<!--div class='row'>
+    <button id='table-toggle' class='btn'>Show Table</button>
+</div-->
+<div id='table' class='row'>
+    <table id='photos' class='table'>
+        <thead>
+            <tr>
+                <td>Preview</td>
+                <td>Link</td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+
+    </table>
+</div>
 {% endblock %}

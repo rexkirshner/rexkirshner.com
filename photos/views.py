@@ -23,6 +23,11 @@ def upload_photo(request):
                               {'form':form},
                               context_instance=RequestContext(request))    
 
+def generate_oauth_token(request):
+    return render_to_response("photos/authenticate.html",
+                              {'flickr':settings.FLICKR_INFO},
+                              context_instance=RequestContext(request))    
+
 
 def index(request):
             

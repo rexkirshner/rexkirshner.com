@@ -1,0 +1,21 @@
+.flexslider .slides li {
+    position:relative;
+}
+
+.flex-caption {
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    background:#000; /* whatever you want */    
+    z-index:1;
+    padding:5px;
+}
+
+.left-caption {
+    text-align: left;
+}
+
+.right-caption {
+    text-align: right;
+}
