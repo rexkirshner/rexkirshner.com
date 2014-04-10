@@ -38,6 +38,9 @@ handlers:
   static_dir: map/static/map
   expiration: '0'
 
+- url: /static/photos
+  static_dir: photos/static/photos
+  expiration: '0'
 
 - url: /.*
   script: djangoappengine.main.application
