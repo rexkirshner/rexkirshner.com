@@ -8,11 +8,11 @@
 {% endblock %}
 
 
+
 {% block javascript %}
 
     <script>
-        var flickr_api_key = "{{flickr.api_key}}";
-        var flickr_user_id = "{{flickr.user_id}}";
+        var flickr_api_get_photos = "{{flickr_api_get_photos|safe}}";
     </script>
     <script src='/static/photos/modernizr.js'></script>
 
@@ -26,7 +26,12 @@
 
 
 {% block content %}
-
+<div class='row'>
+    <div id='carousel' class='flexslider'>
+            <ul class='slides'>
+            </ul>
+        </div>
+</div>
 
 <div class='row'>
     <div class='col-md-2'>
@@ -37,31 +42,11 @@
             </ul>
         </div>
 
-        <div id='carousel' class='flexslider'>
-            <ul class='slides'>
-            </ul>
-        </div>
     </div>
     <div class='col-md-2'>
     </div>
 
     <div class='col-md-0'>
     </div>
-</div>
-<!--div class='row'>
-    <button id='table-toggle' class='btn'>Show Table</button>
-</div-->
-<div id='table' class='row'>
-    <table id='photos' class='table'>
-        <thead>
-            <tr>
-                <td>Preview</td>
-                <td>Link</td>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-
-    </table>
 </div>
 {% endblock %}

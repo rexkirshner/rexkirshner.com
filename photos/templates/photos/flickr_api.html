@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block css %}
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script src="/static/js/pretty-print.js" type="text/javascript"></script>
+
+    
+    <script>
+        $(function(){
+            $('#add-param').click(function(){
+                
+                var num_fields = $('#num-params').val();
+                $('#num-params').val(Number(num_fields) + 1);
+                $('#api-form > div:last').after("<div class='form-group'><label for='param-" + num_fields + "'>Param</label> <input class='input' value='' name='param-" + num_fields + "' id='param-" + num_fields + "' /> <label for='value-" + num_fields + "'>Value</label> <input class='input' name='value-" + num_fields + "' id='value-" + num_fields + "' /></div>");
+            });
+            
+            $('#send-api').click(function(){
+                event.preventDefault();
+                $.get("photos/flickr/api/", $('#api-form').serialize(), function(data) {
+                    $('#flickr-url').empty();
+                    $('#flickr-response').empty();
+                    $('#flickr-url').append('<h1><a href="'+data['url']+ '">Flickr API Link</a></h1>');
+                    $('#flickr-response').append(prettyPrint(data['response']));
+                    //document.getElementById('flickr-response').appendChild(ppTable);
+                    
+                });
+             });
+            
+        });
+    </script>
+
+{% endblock %}
+
+format=json&nojsoncallback=1
+
+{% block content %}
+    <form role='form' id='api-form'>
+        
+        <div class='form-group'>
+            <input class='hidden' value='{% if token %}4{% else %}3{% endif %}' name='num-params' id='num-params' />
+        </div>
+        <div class='form-group'>
+            <label for='param-0'>Param</label>
+            <input class='input' value='format' name='param-0' id='param-0' />
+            <label for='value-0'>Value</label>
+            <input class='input' value='json' name='value-0' id='value-0' />
+        </div>
+        <div class='form-group'>
+            <label for='param-0'>Param</label>
+            <input class='input' value='nojsoncallback' name='param-1' id='param-1' />
+            <label for='value-0'>Value</label>
+            <input class='input' value='1' name='value-1' id='value-1' />
+        </div>
+        {% if token %}
+        <div class='form-group'>
+            <label for='param-0'>Param</label>
+            <input class='input' value='auth_token' name='param-2' id='param-2' />
+            <label for='value-0'>Value</label>
+            <input class='input' value='{{token.token}}' name='value-2' id='value-2' />
+            For user: {{token.nsid}}
+        </div>
+        {% endif %}
+        <div class='form-group'>
+            <label for='param-0'>Param</label>
+            <input class='input' value='method' name='param-{% if token %}3{% else %}2{% endif %}' id='param-{% if token %}3{% else %}2{% endif %}' />
+            <label for='value-0'>Value</label>
+            <input class='input' value='flickr.' name='value-{% if token %}3{% else %}2{% endif %}' id='value-{% if token %}3{% else %}2{% endif %}' />
+            
+        </div>
+        <a class='btn' id='add-param'>Add Param</a>
+        <br />
+        
+        <button class='btn' id='send-api'>Send</button>
+    </form>
+    
+    
+    
+    <div id='flickr-url'>
+    </div>
+    
+    <div id='flickr-response'>
+    </div>
+    
+    
+
+{% endblock %}
