@@ -9,6 +9,12 @@ from settings import UPLOAD_TO
 
 # Create your models here.
 
+class FlickrAuthToken(models.Model):
+    date_created = models.DateTimeField(default = datetime.datetime.now())
+    token = models.CharField(max_length = 100)
+    nsid = models.CharField(max_length = 25)
+    
+
 
 class Photo(models.Model):
     upload_time = models.DateTimeField(default = datetime.datetime.now())

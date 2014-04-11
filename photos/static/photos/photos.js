@@ -29,14 +29,14 @@ $.getJSON( url, function( data ) {
         asNavFor: "#main-photo",
         init: function (slider) {
             // lazy load
-            $("img.lazy").slice(0,5).each(function () {
+            $("img.lazy").slice(0,6).each(function () {
                 var src = $(this).attr("data-src");
                 $(this).attr("src", src).removeAttr("data-src").removeClass("lazy");
             });
         },
         before: function (slider) {
             // lazy load
-            $("img.lazy").slice(0,3).each(function () {
+            $("img.lazy").slice(0,5).each(function () {
                 var src = $(this).attr("data-src");
                 $(this).attr("src", src).removeAttr("data-src").removeClass("lazy");
             });

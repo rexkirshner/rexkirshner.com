@@ -14,9 +14,11 @@
 
 {% endblock %}
 
-
+    
 
 
 {% block content %}
-    <a href='http://flickr.com/services/auth/?api_key={{flickr.api_key}}&perms=read&api_sig={{flickr.api_sig}}'>Auth Link</a>
+    url: {{url}} <br>
+    Token: "{{auth_token}}"
+
 {% endblock %}
