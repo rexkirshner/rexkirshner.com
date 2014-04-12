@@ -2,9 +2,14 @@ var map;
 var path;
 var total_locations = [];
 function initialize() {
+    var zoom_level = 5;
+    if (isMobile.any() ){
+        zoom_level = 3;
+    }
+
     var mapOptions = {
         center: new google.maps.LatLng(39.8282, -98.5795),
-        zoom: 4,
+        zoom: zoom_level,
         scrollwheel: false,
         disableDefaultUI: true,
         zoomControl: true,

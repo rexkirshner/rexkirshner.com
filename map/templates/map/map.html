@@ -15,7 +15,23 @@
 
 
 {% block content %}
-    <div id='map-controls'>
+
+    
+    <div id="map" class="panel panel-default map-panel">
+        <div id='loading-area'>
+
+        
+            <div class="panel-body" id="map-canvas">
+                Panel content
+            </div>
+            
+            <div id="info-panel" class="panel-footer" style='height:44px; text-align:center'>
+            </div>
+        </div>
+      
+    </div>
+    
+        <div id='map-controls'>
         <form  id='map-form' class="form-inline horz-center" role="form">
             <div class='center'>
                 <div class="form-group">
@@ -30,19 +46,5 @@
                 <label><input type="checkbox" id='layovers' checked> Show Layovers</label>
             </div>
         </form>
-    </div>
-    
-    <div id="map" class="panel panel-default map-panel">
-        <div id='loading-area'>
-
-        
-            <div class="panel-body" id="map-canvas">
-                Panel content
-            </div>
-            
-            <div id="info-panel" class="panel-footer" style='height:44px; text-align:center'>
-            </div>
-        </div>
-      
     </div>
 {% endblock %}

@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'dbindexer',
     'blobstore_storage',
     'rexkirshnercom',
+    'home',
     'map',
     'photos',
 

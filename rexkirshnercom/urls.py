@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, include, url
 
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
+
 
 urlpatterns = patterns('',
     # Examples:
@@ -19,6 +21,7 @@ urlpatterns = patterns('',
     
     url(r'^map/', include('map.urls')),
     url(r'^photos/', include('photos.urls')),
+    url(r'^', include('home.urls')),
     
 
 )

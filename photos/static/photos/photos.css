@@ -1,21 +1,16 @@
-.flexslider .slides li {
-    position:relative;
+#control-carousel .owl-item img {
+height: 120px;
+display: block;
+width: auto;
 }
 
-.flex-caption {
+#main-photo img {
+    width: 100%;
+    height: 100%;
+}
+
+#main-photo a {
     position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    background:#000; /* whatever you want */    
-    z-index:1;
-    padding:5px;
-}
-
-.left-caption {
-    text-align: left;
-}
-
-.right-caption {
-    text-align: right;
+    z-index:200;
+    right: 20px;
 }
