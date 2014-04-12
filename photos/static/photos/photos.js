@@ -1,39 +1,13 @@
 //var google_map_url = 'http://maps.googleapis.com/maps/api/staticmap?&zoom=6&size=600x300&markers=color:blue|%s,%s&sensor=true'
 var google_map_url = 'http://maps.google.com/maps?&z=6&q=loc:%s,%s'
 
-
-
-
-// function get_flickr_photos() {
-// $.getJSON( flickr_api_get_photos, function( data ) {
-// 
-// photos = data['photoset']['photo'];
-// $.each( photos, function( key, val ) {
-// //var tiny_photo_url = 'http://farm' + val['farm'] + '.staticflickr.com/' + val['server']+ '/' + val['id'] + '_' + val['secret'] + '_s.jpg';
-// var medium_photo_url = 'http://farm' + val['farm'] + '.staticflickr.com/' + val['server']+ '/' + val['id'] + '_' + val['secret'] + '_m.jpg'; 
-// //var large_photo_url = 'http://farm' + val['farm'] + '.staticflickr.com/' + val['server']+ '/' + val['id'] + '_' + val['secret'] + '_b.jpg';
-// //if (val['latitude'] != '0' && val['longitude'] !='0'){    
-// //var main_photo = '<li><p class="flex-caption"><a title="Taken on ' + val['datetaken'] + '"class="map-link" href="' + sprintf(google_map_url, val['latitude'], val['longitude']) + '">Check where this was taken</a></p><image class="lazy" data-src="' + large_photo_url + '"></image></li>'  
-// //} else {
-// //var main_photo = '<li><image class="lazy" data-src="' + large_photo_url + '"></image></li>'  
-// //}
-// //$('#main-photo > ul:last').append(main_photo);
-// //$('#carousel > ul:last').append('<li><image class="lazy" data-src="' + medium_photo_url + '"></image></li>');
-// $('#owl-example').append('<div><image class="lazy" data-src="' + medium_photo_url + '"></image></div>');
-// 
-// });
-// $("#owl-example").owlCarousel();
-// 
-// }
-// 
-// }
-
 function init_carousels() {
   var sync2 = $("#control-carousel");
  
     options = {
-        items : 15,
+        items : 7,
         lazyLoad: true,
+        lazyEffect: false,
         itemsDesktop      : [1199,10],
         itemsDesktopSmall     : [979,10],
         itemsTablet       : [768,8],
