@@ -1,4 +1,4 @@
-import urllib2, datetime
+import urllib2, datetime, random
 from math import radians, cos, sin, asin, sqrt
 
 from django.shortcuts import render_to_response
@@ -9,6 +9,84 @@ from django.http import HttpResponse
 
 
 import settings
+
+import base_trips
+
+from models import Flight
+
+def reset_database(request):
+    Flight.objects.all().delete()
+    num = 0
+    for trip_wrapper in base_trips.flights['flights']:
+        trip = trip_wrapper['flight']
+        new_flight = Flight()
+        new_flight.build_from_json(trip)
+        new_flight.save()
+        num += 1
+        if trip['round-trip'] == 'True':
+            new_return_flight = Flight()
+            new_return_flight.build_return_flight(new_flight, trip['return'])
+            new_return_flight.save()
+            num += 1
+    recap = 'num of entries added: %d' % num
+    
+    return HttpResponse(recap)
+
+def trip_history(request):
+    legs = Flight.objects.all().order_by('-date')
+    legs_json = []
+    location_counts = {}
+    i = 0
+    for leg in legs:
+        if i % 1 == 0:
+            o_num_times = location_counts.get(leg.origin_name,0)
+            leg.origin_lat += random.uniform(-.006 * o_num_times, .006 * o_num_times)
+            leg.origin_long += random.uniform(-.0025 * o_num_times, .0025 * o_num_times)
+            location_counts[leg.origin_name] = o_num_times + 1
+        else:
+            d_num_times = location_counts.get(leg.dest_name,0)
+            leg.dest_lat += random.uniform(-.006 * d_num_times, .006 * d_num_times)
+            leg.dest_long += random.uniform(-.0025 * d_num_times, .0025 * d_num_times)
+
+            location_counts[leg.dest_name] = d_num_times + 1
+        
+        legs_json.append({'trip':leg.to_dict()})
+        #location_counts['St. Louis'] = 0
+        i += 1
+    response = HttpResponse(str(legs_json).replace("'", '"').replace('u"', '"'))
+    return response
+
+def index(request):
+    return render_to_response("map/map2.html",
+                              {},
+                              context_instance=RequestContext(request))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from models import LocationHistoryPoint
 
 
@@ -124,11 +202,6 @@ class Analyzer(object):
     def json(self):
         return  simplejson.dumps(self.locations) 
     
-def index(request):
-    return render_to_response("map/map.html",
-                              {},
-                              context_instance=RequestContext(request))
-
 def location_history(request):
     if settings.USE_DB:
         data = LocationHistoryPoint.objects.all().order_by('-timestamp')
@@ -173,7 +246,12 @@ def update_database(request):
     
     return HttpResponse(recap)
     
-    
+
+
+
+
+
+  
     
     
     

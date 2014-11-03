@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import LocationHistoryPoint
+from models import Flight
 # Register your models here.
 
-admin.site.register(LocationHistoryPoint)
+admin.site.register(Flight)
