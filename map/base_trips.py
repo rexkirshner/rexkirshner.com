@@ -3,7 +3,7 @@ flights = {
         {
             "flight": {
                 "origin": "St. Louis",
-                "destination_coords": "(36.59833935, -93.4036373055626)",
+                "destination_coords": "(36.57866105, -93.5018938325166)",
                 "destination": "Table Rock Lake",
                 "return": "8-4-13",
                 "title": "Brennens Family Lake House",
@@ -88,7 +88,7 @@ flights = {
         {
             "flight": {
                 "origin": "St. Louis",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "return": "12-1-13",
                 "title": "2013 Thanksgiving",
@@ -154,7 +154,7 @@ flights = {
         {
             "flight": {
                 "origin": "Park City",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "title": "2013 New Years in LA and Rose Bowl",
                 "work": "False",
@@ -171,7 +171,7 @@ flights = {
                 "destination": "St. Louis",
                 "title": "",
                 "work": "False",
-                "origin_coords": "(34.0724796, -118.3217456)",
+                "origin_coords": "(34.053717, -118.2427266)",
                 "flight-id": 12,
                 "date": "1-4-14",
                 "round-trip": "False"
@@ -221,7 +221,7 @@ flights = {
         {
             "flight": {
                 "origin": "San Francisco",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "title": "LA Presidents Day Weekend",
                 "work": "False",
@@ -238,9 +238,9 @@ flights = {
                 "destination": "St. Louis",
                 "title": "",
                 "work": "False",
-                "origin_coords": "(34.0724796, -118.3217456)",
+                "origin_coords": "(34.053717, -118.2427266)",
                 "flight-id": 17,
-                "date": "2-17-14",
+                "date": "1-16-14",
                 "round-trip": "False"
             }
         },
@@ -289,7 +289,7 @@ flights = {
         {
             "flight": {
                 "origin": "St. Louis",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "return": "4-20-14",
                 "title": "2014 Easter",
@@ -331,7 +331,7 @@ flights = {
         {
             "flight": {
                 "origin": "St. Louis",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "return": "5-26-14",
                 "title": "LA Memorial Day",
@@ -387,7 +387,7 @@ flights = {
         {
             "flight": {
                 "origin": "St. Louis",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "return": "8-10-14",
                 "title": "23rd Birthday Trip",
@@ -466,7 +466,7 @@ flights = {
         {
             "flight": {
                 "origin": "Palo Alto",
-                "destination_coords": "(34.0724796, -118.3217456)",
+                "destination_coords": "(34.053717, -118.2427266)",
                 "destination": "Los Angeles",
                 "title": "LA Sanity Trip",
                 "work": "False",
@@ -483,7 +483,7 @@ flights = {
                 "destination": "St. Louis",
                 "title": "",
                 "work": "False",
-                "origin_coords": "(34.0724796, -118.3217456)",
+                "origin_coords": "(34.053717, -118.2427266)",
                 "flight-id": 35,
                 "date": "9-28-14",
                 "round-trip": "False"
@@ -531,14 +531,164 @@ flights = {
                 "date": "10-20-14",
                 "round-trip": "True"
             }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(40.6460635, -111.4979741)",
+                "destination": "Park City",
+                "return": "11-11-14",
+                "title": "2014 Veterans Day Weekend",
+                "work": "False",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 39,
+                "date": "11-7-14",
+                "round-trip": "True"
+            }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(34.053717, -118.2427266)",
+                "destination": "Los Angeles",
+                "return": "11-30-14",
+                "title": "2014 Thanksgiving",
+                "work": "False",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 40,
+                "date": "11-23-14",
+                "round-trip": "True"
+            }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(40.6460635, -111.4979741)",
+                "destination": "Park City",
+                "title": "2014 Christmas in Park City",
+                "work": "False",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 41,
+                "date": "12-19-14",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "Park City",
+                "destination_coords": "(34.053717, -118.2427266)",
+                "destination": "Los Angeles",
+                "title": "2014 New Years in LA",
+                "work": "False",
+                "origin_coords": "(40.6460635, -111.4979741)",
+                "flight-id": 42,
+                "date": "12-26-14",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "Los Angeles",
+                "destination_coords": "(38.6272733, -90.1978889)",
+                "destination": "St. Louis",
+                "title": "",
+                "work": "False",
+                "origin_coords": "(34.053717, -118.2427266)",
+                "flight-id": 43,
+                "date": "1-3-15",
+                "round-trip": "False"
+
+            }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(37.7792768, -122.4192704)",
+                "destination": "San Francisco",
+                "return": "1-19-15",
+                "title": "2015 MLK long weekend",
+                "work": "False",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 44,
+                "date": "1-16-15",
+                "round-trip": "True"
+            }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(40.1164205, -88.2433829)",
+                "destination": "Champaign",
+                "title": "Bud Lab Visit",
+                "work": "True",
+                "drive": "True",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 45,
+                "date": "1-21-15",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "Champaign",
+                "destination_coords": "(41.8755546, -87.6244212)",
+                "destination": "Chicago",
+                "title": "1871 Visit",
+                "work": "True",
+                "drive": "True",
+                "origin_coords": "(40.1164205, -88.2433829)",
+                "flight-id": 46,
+                "date": "1-22-15",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "Chicago",
+                "destination_coords": "(40.6460635, -111.4979741)",
+                "destination": "Park City",
+                "title": "2015 Sundance",
+                "work": "False",
+                "origin_coords": "(41.8755546, -87.6244212)",
+                "flight-id": 47,
+                "date": "1-23-15",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "Park City",
+                "destination_coords": "(38.6272733, -90.1978889)",
+                "destination": "St. Louis",
+                "title": "",
+                "work": "False",
+                "origin_coords": "(40.6460635, -111.4979741)",
+                "flight-id": 48,
+                "date": "1-26-15",
+                "round-trip": "False"
+            }
+        },
+        {
+            "flight": {
+                "origin": "St. Louis",
+                "destination_coords": "(33.4467681, -112.0756724)",
+                "destination": "Phoenix",
+                "return": "2-2-15",
+                "title": "2015 Super Bowl",
+                "work": "True",
+                "origin_coords": "(38.6272733, -90.1978889)",
+                "flight-id": 49,
+                "date": "1-29-15",
+                "round-trip": "True"
+            }
         }
     ]
 }
 
 
 
-if __name__ == '__main__':
-    f = flights['flights'][0]['flight']
-    print '----'
-    print float(f['destination_coords'][1:-1].split(',')[0])
-    print '----'
+if __name__ == "__main__":
+    f = flights["flights"][0]["flight"]
+    print "----"
+    print float(f["destination_coords"][1:-1].split(",")[0])
+    print "----"

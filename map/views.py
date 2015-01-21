@@ -12,25 +12,58 @@ import settings
 
 import base_trips
 
-from models import Flight
+from models import Flight, Distance
 
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+
+    # 6367 km is the radius of the Earth
+    km = 6367 * c
+    return km
+    
 def reset_database(request):
     Flight.objects.all().delete()
-    num = 0
+    Distance.objects.all().delete()
+    
+    num_trip = 0
+    num_dis = 0
     for trip_wrapper in base_trips.flights['flights']:
         trip = trip_wrapper['flight']
         new_flight = Flight()
         new_flight.build_from_json(trip)
         new_flight.save()
-        num += 1
+        num_trip += 1
         if trip['round-trip'] == 'True':
             new_return_flight = Flight()
             new_return_flight.build_return_flight(new_flight, trip['return'])
             new_return_flight.save()
-            num += 1
-    recap = 'num of entries added: %d' % num
+            num_trip += 1
+        
+        keys = [trip['origin'], trip['destination']]
+        keys.sort()
+        
+        d, created = Distance.objects.get_or_create(point_a = keys[0], point_b = keys[1])
+        if created:
+            d.distance_km = haversine( new_flight.origin_long, new_flight.origin_lat, new_flight.dest_long, new_flight.dest_lat)
+            d.save() 
+            num_dis += 1
+            
+    recap = 'num of entries added: %d <br />' % num_trip
+    recap += 'num of distances created: %d <br />' % num_dis
+    return HttpResponse(recap)    
     
-    return HttpResponse(recap)
 
 def trip_history(request):
     legs = Flight.objects.all().order_by('-date')
@@ -51,10 +84,16 @@ def trip_history(request):
             location_counts[leg.dest_name] = d_num_times + 1
         
         legs_json.append({'trip':leg.to_dict()})
-        #location_counts['St. Louis'] = 0
         i += 1
-    response = HttpResponse(str(legs_json).replace("'", '"').replace('u"', '"'))
+    
+    distances = Distance.objects.all()
+    distances_json = []
+    for d in distances:
+        distances_json.append({'distance':d.to_dict()})
+    
+    response = HttpResponse(str({'start_date': '07-15-13', 'trips':legs_json, 'distances':distances_json}).replace("'", '"').replace('u"', '"'))
     return response
+
 
 def index(request):
     return render_to_response("map/map2.html",
@@ -86,28 +125,10 @@ def index(request):
 
 
 
-
 from models import LocationHistoryPoint
 
 
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points 
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians 
-    
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
-    # haversine formula 
-    dlon = lon2 - lon1 
-    dlat = lat2 - lat1 
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
-
-    # 6367 km is the radius of the Earth
-    km = 6367 * c
-    return km
 
 class Parser(object):
     

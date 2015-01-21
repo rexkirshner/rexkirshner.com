@@ -1,6 +1,10 @@
 var map;
 var paths = [];
 var total_locations = [];
+var distances = {};
+var start_date;
+var end_date;
+
 function initialize() {
     var zoom_level = 5;
     if (isMobile.any() ){
@@ -35,13 +39,27 @@ function zoomToObject(obj){
 }
 
 function pullMap() {
-    
+
     total_locations = [];
     $.getJSON('api/trips/', function(data){
-        $.each(data, function(i, obj) {
-            
-            total_locations.push(obj['trip']);
+
+        var x = 0;
+        $.each(data['distances'], function(i, obj) {    
+            var key = obj['distance']['a'] + '-' + obj['distance']['b'];
+            var mi = parseInt(obj['distance']['mi']);
+            distances[key] =  mi;
+            x += 1;
         });
+        var y = 0  ; 
+        $.each(data['trips'], function(i, obj) {    
+            total_locations.push(obj['trip']);
+            y += 1;
+        });
+        
+        start_date = new Date(data['start_date']);
+        
+        calcMapStats();
+
         updateMap();
     });
 }
@@ -95,6 +113,67 @@ function updateMap(resize){
     
 }
 
+var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+
+function diffDays (firstDate, secondDate) {
+    
+    return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+}
+
+function calcMapStats(){
+    years = {}
+
+    for (var i = 0; i <= new Date().getFullYear() - 2013; i++){
+        years[2013 + i] = {'total_distance_traveled':0,
+                           'num_flights':0,
+                           'days_in':{},
+                          };
+    }    
+    
+    console.log(start_date);
+    
+    years[start_date.getFullYear()]['days_in']['St. Louis'] = diffDays(start_date, new Date(total_locations[total_locations.length - 1]['date']))
+    
+    for (var i = total_locations.length - 1; i >= 0; i--){
+        var y = new Date(total_locations[i]['date']).getFullYear();
+        var places = [total_locations[i]['origin_name'], total_locations[i]['dest_name']];
+        places.sort();
+        years[y]['total_distance_traveled'] += distances[places[0] + '-' + places[1]];
+        
+        years[y]['num_flights'] += 1;
+        
+        if (i > 0) {            
+            if (!(total_locations[i]['dest_name'] in years[y]['days_in'])){
+                years[y]['days_in'][total_locations[i]['dest_name']] = 0;
+            } 
+            
+            var d1 = new Date(total_locations[i]['date']);
+            var d2 = new Date(total_locations[i-1]['date']);
+            
+            if (d1.getFullYear() != d2.getFullYear()) {
+                d2 = new Date(y, 11, 31, 23);
+            }
+            years[y]['days_in'][total_locations[i]['dest_name']] += diffDays(d1, d2)
+        }
+    }
+    
+
+    
+    end_date = new Date(total_locations[0]['date'])
+
+    if (end_date < new Date()){
+        end_date = new Date();
+    }
+    
+    years[end_date.getFullYear()]['days_in']['St. Louis'] += diffDays(new Date(total_locations[0]['date']), end_date);
+        
+}
+
+function dispMapStats() {
+
+
+}
+
 
 $(function() {
     
@@ -104,8 +183,8 @@ $(function() {
 
     pullMap();
 
-
 });
+
 
 
     

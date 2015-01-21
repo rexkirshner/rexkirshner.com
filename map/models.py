@@ -54,3 +54,14 @@ class Flight(models.Model):
         
     def __unicode__(self):
         return '%s: from %s to %s on %s' % (self.title, self.origin_name, self.dest_name, self.date)
+
+class Distance(models.Model):
+    point_a = models.CharField(max_length = 30)
+    point_b = models.CharField(max_length = 30)
+    distance_km = models.IntegerField(default = -1)
+    
+    def to_dict(self):
+        return {'a':self.point_a, 'b':self.point_b, 'mi':int(self.distance_km * .621371)}
+        
+    def __unicode__(self):
+        return '%s to %s' % (self.point_a, self.point_b)
